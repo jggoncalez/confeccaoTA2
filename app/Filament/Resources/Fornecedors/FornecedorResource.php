@@ -17,6 +17,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Support\RawJs;
 
 class FornecedorResource extends Resource
 {
@@ -33,10 +34,10 @@ class FornecedorResource extends Resource
         ->components([
             TextInput::make('nome') -> required()->label('Nome'),
             TextInput::make('email') -> email()->label('E-mail'),
-            TextInput::make('telefone') -> tel()->label('Telefone'),
-            TextInput::make('documento') ->label('CNPJ'),
+            TextInput::make('telefone') -> tel()->label('Telefone')->mask('(99) 99999-9999'),
+            TextInput::make('documento')->label('CNPJ')->mask('99.999.999/9999-99'),
             TextInput::make('cidade')->label('Cidade'),
-            TextInput::make('cep')->label('CNPJ') 
+            TextInput::make('cep')->label('CEP')->mask('99999-999')
         ]);
     }
 

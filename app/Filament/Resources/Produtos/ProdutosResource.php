@@ -32,8 +32,8 @@ class ProdutosResource extends Resource
         ->components([
             TextInput::make('nome') -> required()->label('Nome'),
             TextInput::make('descricao') ->label('Descrição'),
-            TextInput::make('preco') ->label('Preço'),
-            TextInput::make('quantidade')->label('Quantidade'),
+            TextInput::make('preco') ->label('Preço')->numeric()->prefix('R$')->step(0.01),
+            TextInput::make('quantidade')->label('Quantidade')->numeric()->step(0.01),
         ]);
     }
 
@@ -44,7 +44,12 @@ class ProdutosResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return ProdutosTable::configure($table);
+        return $table -> columns([
+            TextColumn::make('nome')->searchable(),
+            TextColumn::make('descricao')->searchable(),
+            TextColumn::make('preco')->money('BRL'),
+            TextColumn::make('quantidade')->numeric()->step(0.01),
+        ]);
     }
 
     public static function getRelations(): array
