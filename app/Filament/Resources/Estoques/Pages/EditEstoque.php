@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\ItemPedidos\Pages;
+namespace App\Filament\Resources\Estoques\Pages;
 
-use App\Filament\Resources\ItemPedidos\ItemPedidoResource;
+use App\Filament\Resources\Estoques\EstoqueResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditItemPedido extends EditRecord
+class EditEstoque extends EditRecord
 {
-    protected static string $resource = ItemPedidoResource::class;
+    protected static string $resource = EstoqueResource::class;
 
     protected function getHeaderActions(): array
     {

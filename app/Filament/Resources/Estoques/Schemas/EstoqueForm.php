@@ -1,27 +1,29 @@
 <?php
 
-namespace App\Filament\Resources\ItemPedidos\Schemas;
+namespace App\Filament\Resources\Estoques\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 
-class ItemPedidoForm
+class EstoqueForm
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('pedido_id')
-                    ->required()
-                    ->numeric(),
                 TextInput::make('produto_id')
                     ->required()
                     ->numeric(),
+                Select::make('transacao')
+                    ->options(['entrada' => 'Entrada', 'saida' => 'Saida'])
+                    ->required(),
                 TextInput::make('quantidade')
                     ->required()
                     ->numeric(),
-                TextInput::make('preco_unitario')
-                    ->numeric(),
+                Textarea::make('observacoes')
+                    ->columnSpanFull(),
             ]);
     }
 }

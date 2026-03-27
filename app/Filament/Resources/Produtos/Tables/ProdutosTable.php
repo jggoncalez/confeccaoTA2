@@ -36,8 +36,14 @@ class ProdutosTable
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                ViewAction::make()->label('Visualizar'),
+                EditAction::make()->label('Editar'),
+                EditAction::make('entrada_estoque')
+                ->label('Entrada')
+                ->sortable()
+                ->icon('heroicon-o-plus-circle')
+                ->color('success'),
+
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

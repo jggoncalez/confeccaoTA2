@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\ItemPedidos\Tables;
+namespace App\Filament\Resources\Estoques\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -9,22 +9,18 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class ItemPedidosTable
+class EstoquesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('pedido_id')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('produto_id')
                     ->numeric()
                     ->sortable(),
+                TextColumn::make('transacao')
+                    ->badge(),
                 TextColumn::make('quantidade')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('preco_unitario')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
@@ -40,8 +36,8 @@ class ItemPedidosTable
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                ViewAction::make()->label('Visualizar'),
+                EditAction::make()->label('Editar')
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

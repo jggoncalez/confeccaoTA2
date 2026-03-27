@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Filament\Resources\ItemPedidos\Schemas;
+namespace App\Filament\Resources\Estoques\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 
-class ItemPedidoInfolist
+class EstoqueInfolist
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextEntry::make('pedido_id')
-                    ->numeric(),
                 TextEntry::make('produto_id')
                     ->numeric(),
+                TextEntry::make('transacao')
+                    ->badge(),
                 TextEntry::make('quantidade')
                     ->numeric(),
-                TextEntry::make('preco_unitario')
-                    ->numeric()
-                    ->placeholder('-'),
+                TextEntry::make('observacoes')
+                    ->placeholder('-')
+                    ->columnSpanFull(),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),

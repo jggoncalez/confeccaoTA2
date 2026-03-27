@@ -48,7 +48,7 @@ class ProdutosResource extends Resource
             TextColumn::make('nome')->searchable(),
             TextColumn::make('descricao')->searchable(),
             TextColumn::make('preco')->money('BRL'),
-            TextColumn::make('quantidade')->numeric()->step(0.01),
+            TextColumn::make('quantidade')->numeric(),
         ]);
     }
 
