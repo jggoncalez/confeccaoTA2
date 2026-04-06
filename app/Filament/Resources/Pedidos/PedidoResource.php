@@ -12,6 +12,7 @@ use App\Filament\Resources\Pedidos\Tables\PedidosTable;
 use App\Models\Pedido;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use UnitEnum;
 use BackedEnum;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Repeater;
@@ -25,6 +26,9 @@ use Filament\Tables\Columns\TextColumn;
 class PedidoResource extends Resource
 {
     protected static ?string $model = Pedido::class;
+    protected static string|UnitEnum|null $navigationGroup = 'Vendas';
+    protected static ?int $navigationSort = 1;
+
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

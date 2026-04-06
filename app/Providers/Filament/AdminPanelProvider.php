@@ -31,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugin(ThemeInvernessPlugin::make())
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
+            ->brandName('Painel Admin')
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -42,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
-                FilamentInfoWidget::class,
+                //FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

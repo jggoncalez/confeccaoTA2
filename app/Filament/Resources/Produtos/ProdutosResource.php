@@ -11,6 +11,7 @@ use App\Filament\Resources\Produtos\Schemas\ProdutosInfolist;
 use App\Filament\Resources\Produtos\Tables\ProdutosTable;
 use App\Models\Produtos;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -21,6 +22,8 @@ use Filament\Tables\Columns\TextColumn;
 class ProdutosResource extends Resource
 {
     protected static ?string $model = Produtos::class;
+    protected static string|UnitEnum|null $navigationGroup = 'Estoque';
+    protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

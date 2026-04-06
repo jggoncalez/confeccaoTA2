@@ -11,6 +11,7 @@ use App\Filament\Resources\Permissions\Schemas\PermissionInfolist;
 use App\Filament\Resources\Permissions\Tables\PermissionsTable;
 // use App\Models\Permission;
 use Spatie\Permission\Models\Permission;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -22,6 +23,9 @@ use Filament\Tables\Columns\TextColumn;
 class PermissionResource extends Resource
 {
     protected static ?string $model = Permission::class;
+    protected static string|UnitEnum|null $navigationGroup = 'Administração';
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationLabel = 'Painel Permissões';
 
     public static function canAccess(): bool
     {   

@@ -10,6 +10,7 @@ use App\Filament\Resources\Insumos\Schemas\InsumoForm;
 use App\Filament\Resources\Insumos\Schemas\InsumoInfolist;
 use App\Filament\Resources\Insumos\Tables\InsumosTable;
 use App\Models\Insumo;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -22,6 +23,8 @@ class InsumoResource extends Resource
 {
     protected static ?string $model = Insumo::class;
 
+    protected static string|UnitEnum|null $navigationGroup = 'Estoque';
+    protected static ?int $navigationSort = 1;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'Insumo';

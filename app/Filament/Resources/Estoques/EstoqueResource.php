@@ -8,6 +8,7 @@ use App\Filament\Resources\Estoques\Pages\ListEstoques;
 use App\Filament\Resources\Estoques\Pages\ViewEstoque;
 use App\Models\Estoque;
 use BackedEnum;
+use UnitEnum;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Forms\Components\Select;
@@ -25,6 +26,8 @@ class EstoqueResource extends Resource
     protected static ?string $model = Estoque::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|UnitEnum|null $navigationGroup = 'Estoque';
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $recordTitleAttribute = 'Movimentações de Estoque';
 

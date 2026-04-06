@@ -10,6 +10,7 @@ use App\Filament\Resources\Fornecedors\Schemas\FornecedorForm;
 use App\Filament\Resources\Fornecedors\Schemas\FornecedorInfolist;
 use App\Filament\Resources\Fornecedors\Tables\FornecedorsTable;
 use App\Models\Fornecedor;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -22,10 +23,15 @@ use Filament\Support\RawJs;
 class FornecedorResource extends Resource
 {
     protected static ?string $model = Fornecedor::class;
-
+    protected static string|UnitEnum|null $navigationGroup = 'Cadastros Gerais';
+    protected static ?int $navigationSort = 2;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'Fornecedor';
+
+    protected static ?string $navigationLabel = 'Fornecedor';
+    protected static ?string $modelLabel = 'Fornecedor';
+    protected static ?string $pluralModelLabel = 'Fornecedores';
 
     public static function form(Schema $schema): Schema
     {
