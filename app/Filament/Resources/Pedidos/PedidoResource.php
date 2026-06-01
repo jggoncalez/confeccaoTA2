@@ -22,6 +22,10 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 
 class PedidoResource extends Resource
 {
@@ -55,8 +59,7 @@ class PedidoResource extends Resource
                 ->required(),
                 TextInput::make('valor_total')
                     ->label('Valor Total')
-                    ->numeric()
-                    ->prefix('R$ '),
+                    ->numeric(),
                 Repeater::make('itens')
                     ->relationship('itens')
                     ->schema([
@@ -115,12 +118,12 @@ class PedidoResource extends Resource
                         'concluido' => 'success',
                         default => 'secondary',
                     })
+                    ->sortable()
                     ->label('Status'),
                 TextColumn::make('valor_total')
                     ->label('Valor Total')
                     ->money('BRL', true)
-                    ->sortable()
-                    ->prefix('R$ '),
+                    ->sortable(),
                 
                 TextColumn::make('created_at')
                     ->label('Data do Pedido')
@@ -128,7 +131,26 @@ class PedidoResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->label('Status')
+                    ->options([
+                        'pendente'     => 'Pendente',
+                        'em_andamento' => 'Em Andamento',
+                        'concluido'    => 'Concluído',
+                    ]),
+                Filter::make('created_at')
+                    ->label('Período')
+                    ->form([
+                        DatePicker::make('from')->label('De'),
+                        DatePicker::make('until')->label('Até'),
+                    ])
+                    ->query(fn (Builder $query, array $data) => $query
+                        ->when($data['from'],  fn ($q, $v) => $q->whereDate('created_at', '>=', $v))
+                        ->when($data['until'], fn ($q, $v) => $q->whereDate('created_at', '<=', $v))
+                    ),
+                Filter::make('alto_valor')
+                    ->label('Valor acima de R$ 1.000')
+                    ->query(fn (Builder $query) => $query->where('valor_total', '>=', 1000)),
             ]);
     }
 

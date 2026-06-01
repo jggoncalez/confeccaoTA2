@@ -8,6 +8,11 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use App\Models\Fornecedor;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 
 class FornecedorsTable
 {
@@ -16,7 +21,8 @@ class FornecedorsTable
         return $table
             ->columns([
                 TextColumn::make('nome')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
@@ -25,7 +31,8 @@ class FornecedorsTable
                 TextColumn::make('documento')
                     ->searchable(),
                 TextColumn::make('cidade')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('cep')
                     ->searchable(),
                 TextColumn::make('created_at')
@@ -38,7 +45,19 @@ class FornecedorsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('cidade')
+                    ->label('Cidade')
+                    ->options(fn () => Fornecedor::distinct()->pluck('cidade', 'cidade')->filter()->toArray()),
+                Filter::make('created_at')
+                    ->label('Período de cadastro')
+                    ->form([
+                        DatePicker::make('from')->label('De'),
+                        DatePicker::make('until')->label('Até'),
+                    ])
+                    ->query(fn (Builder $query, array $data) => $query
+                        ->when($data['from'],  fn ($q, $v) => $q->whereDate('created_at', '>=', $v))
+                        ->when($data['until'], fn ($q, $v) => $q->whereDate('created_at', '<=', $v))
+                    ),
             ])
             ->recordActions([
                 ViewAction::make(),

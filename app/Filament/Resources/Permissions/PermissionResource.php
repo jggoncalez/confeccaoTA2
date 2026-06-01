@@ -19,6 +19,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 
 class PermissionResource extends Resource
 {
@@ -59,9 +60,19 @@ class PermissionResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Nome da regra'),
+                    ->label('Nome da regra')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('guard_name')
-                    ->label('Sigla'),
+                    ->label('Guard')
+                    ->sortable()
+                    ->badge(),
+            ])
+            ->filters([
+                SelectFilter::make('guard_name')
+                    ->label('Guard')
+                    ->options(fn () => \Spatie\Permission\Models\Permission::distinct()
+                        ->pluck('guard_name', 'guard_name')->toArray()),
             ]);
     }
 

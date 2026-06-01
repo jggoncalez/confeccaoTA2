@@ -20,6 +20,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Filters\SelectFilter;
 
 class RoleResource extends Resource
 {
@@ -65,12 +66,24 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('permissions.name')
-                    ->label('Acesso'),
                 TextColumn::make('name')
-                    ->label('Nome da regra'),
+                    ->label('Nome do cargo')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('guard_name')
-                    ->label('Sigla'),
+                    ->label('Guard')
+                    ->sortable()
+                    ->badge(),
+                TextColumn::make('permissions.name')
+                    ->label('Permissões')
+                    ->badge()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                SelectFilter::make('guard_name')
+                    ->label('Guard')
+                    ->options(fn () => \Spatie\Permission\Models\Role::distinct()
+                        ->pluck('guard_name', 'guard_name')->toArray()),
             ]);
     }
 

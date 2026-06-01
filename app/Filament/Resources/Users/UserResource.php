@@ -20,6 +20,10 @@ use Filament\Resources\Components\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
@@ -65,21 +69,35 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('email')->label('Email address'),
+                TextColumn::make('name')->searchable()->sortable()->label('Nome'),
+                TextColumn::make('email')->searchable()->sortable()->label('E-mail'),
                 TextColumn::make('email_verified_at')
-                    ->dateTime(),
+                    ->label('E-mail verificado')
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable(),
+                    ->label('Criado em')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('roles.name')
-                    ->label('Cargos'),
+                    ->label('Cargos')
+                    ->badge(),
             ])
             ->filters([
-                //
+                TernaryFilter::make('email_verified_at')
+                    ->label('E-mail verificado')
+                    ->nullable(),
+                Filter::make('created_at')
+                    ->label('Período de cadastro')
+                    ->form([
+                        DatePicker::make('from')->label('De'),
+                        DatePicker::make('until')->label('Até'),
+                    ])
+                    ->query(fn (Builder $query, array $data) => $query
+                        ->when($data['from'],  fn ($q, $v) => $q->whereDate('created_at', '>=', $v))
+                        ->when($data['until'], fn ($q, $v) => $q->whereDate('created_at', '<=', $v))
+                    ),
             ])
             ->recordActions([
                 //

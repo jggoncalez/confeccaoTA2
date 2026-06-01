@@ -18,6 +18,8 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProdutosResource extends Resource
 {
@@ -47,12 +49,23 @@ class ProdutosResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table -> columns([
-            TextColumn::make('nome')->searchable(),
-            TextColumn::make('descricao')->searchable(),
-            TextColumn::make('preco')->money('BRL'),
-            TextColumn::make('quantidade')->numeric(),
-        ]);
+        return $table
+            ->columns([
+                TextColumn::make('nome')->searchable()->sortable(),
+                TextColumn::make('descricao')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('preco')->money('BRL')->sortable()->label('Preço'),
+                TextColumn::make('quantidade')->numeric()->sortable()->label('Estoque'),
+            ])
+            ->filters([
+                Filter::make('estoque_baixo')
+                    ->label('Estoque baixo (< 30 unidades)')
+                    ->query(fn (Builder $query) => $query->where('quantidade', '<', 30)),
+                Filter::make('sem_estoque')
+                    ->label('Sem estoque')
+                    ->query(fn (Builder $query) => $query->where('quantidade', '<=', 0)),
+            ]);
     }
 
     public static function getRelations(): array

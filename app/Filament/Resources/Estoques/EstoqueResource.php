@@ -20,6 +20,10 @@ use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 
 class EstoqueResource extends Resource
 {
@@ -80,12 +84,47 @@ class EstoqueResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
-            TextColumn::make('produto.nome')->searchable()->label('Produto'),
-            TextColumn::make('transacao')->badge()->label('Transação'),
-            TextColumn::make('quantidade')->numeric()->label('Quantidade'),
-            TextColumn::make('observacoes')->limit(50)->label('Observações'),
-        ]);
+        return $table
+            ->columns([
+                TextColumn::make('produto.nome')->searchable()->sortable()->label('Produto'),
+                TextColumn::make('transacao')
+                    ->badge()
+                    ->color(fn (string $state) => match ($state) {
+                        'entrada' => 'success',
+                        'saida'   => 'danger',
+                        default   => 'gray',
+                    })
+                    ->sortable()
+                    ->label('Transação'),
+                TextColumn::make('quantidade')->numeric()->sortable()->label('Quantidade'),
+                TextColumn::make('observacoes')
+                    ->limit(50)
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('Observações'),
+                TextColumn::make('created_at')
+                    ->label('Data')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                SelectFilter::make('transacao')
+                    ->label('Transação')
+                    ->options([
+                        'entrada' => 'Entrada',
+                        'saida'   => 'Saída',
+                    ]),
+                Filter::make('created_at')
+                    ->label('Período')
+                    ->form([
+                        DatePicker::make('from')->label('De'),
+                        DatePicker::make('until')->label('Até'),
+                    ])
+                    ->query(fn (Builder $query, array $data) => $query
+                        ->when($data['from'],  fn ($q, $v) => $q->whereDate('created_at', '>=', $v))
+                        ->when($data['until'], fn ($q, $v) => $q->whereDate('created_at', '<=', $v))
+                    ),
+            ]);
     }
 
     public static function getRelations(): array

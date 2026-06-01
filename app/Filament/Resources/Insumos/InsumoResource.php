@@ -18,6 +18,9 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
 
 class InsumoResource extends Resource
 {
@@ -47,12 +50,21 @@ class InsumoResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table -> columns([
-            TextColumn::make('nome')->searchable(),
-            TextColumn::make('unidade_medida')->searchable(),
-            TextColumn::make('preco_custo')->money('BRL'),
-            TextColumn::make('estoque'),
-        ]);
+        return $table
+            ->columns([
+                TextColumn::make('nome')->searchable()->sortable(),
+                TextColumn::make('unidade_medida')->searchable()->sortable()->label('Unidade'),
+                TextColumn::make('preco_custo')->money('BRL')->sortable()->label('Preço de Custo'),
+                TextColumn::make('estoque')->numeric()->sortable(),
+            ])
+            ->filters([
+                SelectFilter::make('unidade_medida')
+                    ->label('Unidade de Medida')
+                    ->options(fn () => Insumo::distinct()->pluck('unidade_medida', 'unidade_medida')->filter()->toArray()),
+                Filter::make('estoque_baixo')
+                    ->label('Estoque baixo (< 50)')
+                    ->query(fn (Builder $query) => $query->where('estoque', '<', 50)),
+            ]);
     }
 
     public static function getRelations(): array

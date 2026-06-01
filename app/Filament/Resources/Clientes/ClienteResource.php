@@ -19,6 +19,9 @@ use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Support\RawJs;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 
 class ClienteResource extends Resource
 {
@@ -59,15 +62,30 @@ class ClienteResource extends Resource
 
     public static function table(Table $table): Table
     {
-        // return ClientesTable::configure($table);
-
         return $table
-        ->columns([
-            TextColumn::make('nome')->searchable(),
-            TextColumn::make('email')->searchable(),
-            TextColumn::make('telefone'),
-            TextColumn::make('documento'),
-        ]);
+            ->columns([
+                TextColumn::make('nome')->searchable()->sortable(),
+                TextColumn::make('email')->searchable()->sortable(),
+                TextColumn::make('telefone'),
+                TextColumn::make('documento')->searchable(),
+                TextColumn::make('created_at')
+                    ->label('Cadastrado em')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                Filter::make('created_at')
+                    ->label('Período de cadastro')
+                    ->form([
+                        DatePicker::make('from')->label('De'),
+                        DatePicker::make('until')->label('Até'),
+                    ])
+                    ->query(fn (Builder $query, array $data) => $query
+                        ->when($data['from'],  fn ($q, $v) => $q->whereDate('created_at', '>=', $v))
+                        ->when($data['until'], fn ($q, $v) => $q->whereDate('created_at', '<=', $v))
+                    ),
+            ]);
     }
 
     public static function getRelations(): array

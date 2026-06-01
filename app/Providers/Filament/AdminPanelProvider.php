@@ -10,6 +10,10 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use App\Filament\Widgets\FaturamentoMensalWidget;
+use App\Filament\Widgets\MyWidget;
+use App\Filament\Widgets\PedidosPorStatusWidget;
+use App\Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -43,7 +47,10 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
-                //FilamentInfoWidget::class,
+                StatsOverviewWidget::class,
+                FaturamentoMensalWidget::class,
+                PedidosPorStatusWidget::class,
+                MyWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
