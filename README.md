@@ -429,7 +429,7 @@ O painel inicial exibe quatro widgets:
 | Faturamento Mensal | Gráfico de linhas | Receita dos últimos 12 meses (apenas pedidos concluídos) |
 | Pedidos por Status | Gráfico de rosca | Distribuição: Pendente, Em Andamento, Concluído |
 
-O widget de faturamento calcula também a **variação percentual mês a mês** e exibe um **gráfico de tendência dos últimos 6 meses**.
+O widget de faturamento calcula também a **variação percentual mês a mês** e exibe um **gráfico de tendência dos últimos 12 meses**.
 
 ---
 
